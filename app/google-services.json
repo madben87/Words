@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "787547331128",
+    "firebase_url": "https://words-ccf25.firebaseio.com",
+    "project_id": "words-ccf25",
+    "storage_bucket": "words-ccf25.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787547331128:android:6ab1198d50274f30",
+        "android_client_info": {
+          "package_name": "com.ben.words"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "787547331128-rkh7shb78nk0fmg9ncn50rb1s5gnvnq5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ben.words",
+            "certificate_hash": "a9ff6d22eb68fef2c29549b2855ff08599faa867"
+          }
+        },
+        {
+          "client_id": "787547331128-3pi8tktbn3kiucei0ickdonj2p8if444.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiZ1zQzxa1yQvOMdANhRLJfXv1TK5dodo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "787547331128-3pi8tktbn3kiucei0ickdonj2p8if444.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
