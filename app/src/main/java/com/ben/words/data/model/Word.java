@@ -3,6 +3,7 @@ package com.ben.words.data.model;
 import java.util.List;
 import java.util.Objects;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -12,7 +13,8 @@ public class Word extends RealmObject {
     private long id;
     private String partsOfSpeech;
     private String value;
-    private List<Translate> translates;
+    private String transcription;
+    private RealmList<Translate> translates;
 
     public Word() {
         this.id = hashCode();
@@ -40,12 +42,20 @@ public class Word extends RealmObject {
         this.id = hashCode();
     }
 
-    public List<Translate> getTranslates() {
+    public RealmList<Translate> getTranslates() {
         return translates;
     }
 
-    public void setTranslates(List<Translate> translates) {
+    public void setTranslates(RealmList<Translate> translates) {
         this.translates = translates;
+    }
+
+    public String getTranscription() {
+        return transcription;
+    }
+
+    public void setTranscription(String transcription) {
+        this.transcription = transcription;
     }
 
     @Override
@@ -63,7 +73,7 @@ public class Word extends RealmObject {
         return Objects.hash(partsOfSpeech, value);
     }
 
-    public String getTranslate() {
+    public String getTranslateValue() {
         StringBuilder result = new StringBuilder();
 
         if (translates != null && translates.size() >0) {
