@@ -42,7 +42,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @OnClick(R.id.fab)
     public void click(View view) {
-        presenter.addNewWord();
+        //presenter.addNewWord();
+        presenter.test();
     }
 
     @Override

@@ -17,11 +17,14 @@ public class Word extends RealmObject {
     private RealmList<Translate> translates;
 
     public Word() {
-        this.id = hashCode();
     }
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getPartsOfSpeech() {
@@ -30,7 +33,6 @@ public class Word extends RealmObject {
 
     public void setPartsOfSpeech(String partsOfSpeech) {
         this.partsOfSpeech = partsOfSpeech;
-        this.id = hashCode();
     }
 
     public String getValue() {
@@ -39,15 +41,24 @@ public class Word extends RealmObject {
 
     public void setValue(String value) {
         this.value = value;
-        this.id = hashCode();
     }
 
     public RealmList<Translate> getTranslates() {
         return translates;
     }
 
-    public void setTranslates(RealmList<Translate> translates) {
-        this.translates = translates;
+    public void setTranslates(/*RealmList<Translate> translates*/ String str) {
+
+        Translate translate = new Translate();
+        translate.setValue(str);
+
+        if (translates != null) {
+            translates.add(translate);
+        }else {
+            translates = new RealmList<>();
+            translates.add(translate);
+        }
+        //this.translates = translates;
     }
 
     public String getTranscription() {

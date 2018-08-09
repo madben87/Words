@@ -5,6 +5,9 @@ import android.app.Application;
 import com.ben.words.modules.ContextModule;
 import com.ben.words.modules.PresenterModule;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 public class App extends Application {
 
     private static App appInstance;
@@ -18,6 +21,12 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Realm.init(this);
+
+        RealmConfiguration config = new RealmConfiguration.Builder().name("words.realm").build();
+
+        Realm.setDefaultConfiguration(config);
 
         appInstance = this;
 

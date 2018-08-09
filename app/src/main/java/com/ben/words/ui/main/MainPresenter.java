@@ -7,4 +7,6 @@ import javax.inject.Inject;
 public interface MainPresenter<V extends MainView> extends Presenter<V> {
 
     void addNewWord();
+
+    void test();
 }
