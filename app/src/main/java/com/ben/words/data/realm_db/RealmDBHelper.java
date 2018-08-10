@@ -1,13 +1,17 @@
 package com.ben.words.data.realm_db;
 
 import android.annotation.SuppressLint;
-import android.support.annotation.NonNull;
 
 import com.ben.words.data.model.Translate;
 import com.ben.words.data.model.Word;
 import com.ben.words.util.KeyGenerator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 
 public class RealmDBHelper {
 
@@ -22,17 +26,20 @@ public class RealmDBHelper {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    Translate translate = new Translate();
 
-                    translate.setValue("тест");
+                    List<Translate> savedTranslates = new RealmList<>();
 
-                    Translate savedTranslate = realm.copyToRealmOrUpdate(translate);
+                    if (item.getTranslates() != null && item.getTranslates().size() > 0) {
+                        for (Translate elem : item.getTranslates()) {
+                            savedTranslates.add(realm.copyToRealmOrUpdate(elem));
+                        }
+                    }
 
                     if (item != null && !item.getValue().isEmpty() && !item.getPartsOfSpeech().isEmpty()) {
                         Word w = realm.createObject(Word.class, KeyGenerator.generateKey(item.getPartsOfSpeech(), item.getValue()));
 
-                        if (!translate.getValue().isEmpty()) {
-                            w.getTranslates().add(savedTranslate);
+                        if (savedTranslates.size() > 0) {
+                            w.setTranslates((RealmList<Translate>) savedTranslates);
                         }
                         w.setValue(item.getValue());
                         w.setPartsOfSpeech(item.getPartsOfSpeech());
@@ -48,5 +55,28 @@ public class RealmDBHelper {
         }
 
         return wordRes;
+    }
+
+    public static Word getItem(long id) {
+        realm = Realm.getDefaultInstance();
+
+        if (realm != null) {
+            wordRes = realm.where(Word.class).equalTo("id", id).findFirst();
+
+            realm.close();
+        }
+
+        return wordRes;
+    }
+
+    public static List<Word> getList() {
+        realm = Realm.getDefaultInstance();
+        List<Word> resList = null;
+
+        if (realm != null) {
+            resList = realm.where(Word.class).findAll();
+            realm.close();
+        }
+        return resList;
     }
 }

@@ -47,10 +47,12 @@ public class Word extends RealmObject {
         return translates;
     }
 
-    public void setTranslates(/*RealmList<Translate> translates*/ String str) {
+    public void setTranslates(RealmList<Translate> translates) {
 
-        Translate translate = new Translate();
-        translate.setValue(str);
+        this.translates = translates;
+    }
+
+    public void addTranslate(Translate translate) {
 
         if (translates != null) {
             translates.add(translate);
@@ -58,7 +60,6 @@ public class Word extends RealmObject {
             translates = new RealmList<>();
             translates.add(translate);
         }
-        //this.translates = translates;
     }
 
     public String getTranscription() {

@@ -41,7 +41,7 @@ public class MainPresenterImpl implements MainPresenter<MainView> {
     public void test() {
         Repository repository = new RealmRepositoryImpl();
 
-        Word word = new Word();
+        /*Word word = new Word();
         word.setPartsOfSpeech("adj");
         word.setValue("test");
         word.setTranslates("тест");
@@ -51,11 +51,11 @@ public class MainPresenterImpl implements MainPresenter<MainView> {
         word1.setPartsOfSpeech("noun");
         word1.setValue("demo");
         word1.setTranslates("демо");
-        word1.setTranscription("дэмо");
+        word1.setTranscription("дэмо");*/
 
         CompositeDisposable disposable = new CompositeDisposable();
 
-        disposable.add((Disposable) repository.addNewItem(word)
+        /*disposable.add((Disposable) repository.addNewItem(word)
                 .debounce(5, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -75,7 +75,7 @@ public class MainPresenterImpl implements MainPresenter<MainView> {
                     public void onComplete() {
 
                     }
-                }));
+                }));*/
 
         view.moveToScreenWithoutBack(AddWordActivity.class);
     }

@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.ben.words.modules.ContextModule;
 import com.ben.words.modules.PresenterModule;
+import com.ben.words.modules.RepositoryModule;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -33,6 +34,7 @@ public class App extends Application {
         appInjector = DaggerAppInjector
                 .builder()
                 .contextModule(new ContextModule(this))
+                .repositoryModule(new RepositoryModule())
                 .build();
 
         screenInjector = DaggerScreenInjector

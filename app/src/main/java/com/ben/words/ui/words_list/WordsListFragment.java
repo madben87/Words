@@ -1,12 +1,14 @@
 package com.ben.words.ui.words_list;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ben.words.R;
 
@@ -31,6 +33,16 @@ public class WordsListFragment extends Fragment implements WordsListView {
         unbinder = ButterKnife.bind(this, view);
 
         return view;
+    }
+
+    @Override
+    public void moveToScreenWithoutBack(Class<? extends Activity> cls) {
+
+    }
+
+    @Override
+    public void showMessage(String str) {
+        Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
     }
 
     @Override

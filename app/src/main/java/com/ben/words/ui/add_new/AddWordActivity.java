@@ -1,15 +1,161 @@
 package com.ben.words.ui.add_new;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ben.words.R;
+import com.ben.words.core.App;
+import com.ben.words.core.Presenter;
+import com.ben.words.data.model.Translate;
+import com.ben.words.data.model.Word;
+import com.ben.words.ui.main.MainActivity;
 
-public class AddWordActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class AddWordActivity extends AppCompatActivity implements AddWordView {
+
+    private static final int DIALOG = 1;
+
+    @BindView(R.id.fieldPartsOfSpeech)
+    EditText fieldPartsOfSpeech;
+    @BindView(R.id.fieldWord)
+    EditText fieldWord;
+    @BindView(R.id.fieldTranscription)
+    EditText fieldTranscription;
+    @BindView(R.id.fieldTranslate)
+    TextView fieldTranslate;
+
+    private EditText dialogAddTranslate;
+
+    @Inject
+    public AddWordPresenter presenter;
+
+    private Word inputWord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_word);
+
+        ButterKnife.bind(this);
+        App.getScreenInjector().inject(this);
+        presenter.attachPresenter(this);
+
+        inputWord = new Word();
+    }
+
+    @OnClick({R.id.btnAddTranslate, R.id.btnSaveWord})
+    public void click(View view) {
+        switch (view.getId()) {
+            case R.id.btnAddTranslate:
+                showDialog(DIALOG);
+                break;
+            case R.id.btnSaveWord:
+                if (fieldsValidation()) {
+                    inputWord.setPartsOfSpeech(fieldPartsOfSpeech.getText().toString());
+                    inputWord.setValue(fieldWord.getText().toString());
+                    if (!fieldTranscription.getText().toString().isEmpty()) {
+                        inputWord.setTranscription(fieldTranscription.getText().toString());
+                    }
+                    presenter.addNewItem(inputWord);
+                    moveToScreenWithoutBack(MainActivity.class);
+                }
+                break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        inputWord = null;
+        presenter.detachPresenter();
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        adb.setTitle("Custom dialog");
+
+        View view = getLayoutInflater()
+                .inflate(R.layout.add_translate_dialog, null);
+
+        adb.setView(view);
+
+        dialogAddTranslate = (EditText) view.findViewById(R.id.dialogAddTranslate);
+
+        CardView dialogBtnSave = (CardView) view.findViewById(R.id.dialogBtnSave);
+
+        dialogBtnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (dialogAddTranslate.getText().toString().isEmpty()) {
+                    showMessage("Please add translate");
+                }else {
+                    Translate translate = new Translate();
+                    translate.setValue(dialogAddTranslate.getText().toString());
+                    inputWord.addTranslate(translate);
+                    updateTranslates();
+                    dialogAddTranslate.setText("");
+                    dismissDialog(DIALOG);
+                }
+            }
+        });
+
+        return adb.create();
+    }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+    }
+
+    @Override
+    public void moveToScreenWithoutBack(Class<? extends Activity> cls) {
+
+    }
+
+    @Override
+    public void showMessage(String str) {
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean fieldsValidation() {
+        if (fieldPartsOfSpeech.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Please add part of speech", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (fieldWord.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Please add value", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (fieldTranslate.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Please add translation", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private void updateTranslates() {
+        if (inputWord != null && inputWord.getTranslates() != null && inputWord.getTranslates().size() > 0) {
+            fieldTranslate.setText(inputWord.getTranslateValue());
+        }
     }
 }
