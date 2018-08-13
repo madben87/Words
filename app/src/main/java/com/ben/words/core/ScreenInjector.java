@@ -3,6 +3,7 @@ package com.ben.words.core;
 import com.ben.words.modules.PresenterModule;
 import com.ben.words.ui.add_new.AddWordActivity;
 import com.ben.words.ui.main.MainActivity;
+import com.ben.words.ui.words_list.WordsListFragment;
 
 import dagger.Component;
 
@@ -12,4 +13,5 @@ public interface ScreenInjector {
 
     void inject(MainActivity activity);
     void inject(AddWordActivity activity);
+    void inject(WordsListFragment activity);
 }

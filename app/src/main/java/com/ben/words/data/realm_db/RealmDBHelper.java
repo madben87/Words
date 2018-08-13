@@ -31,6 +31,7 @@ public class RealmDBHelper {
 
                     if (item.getTranslates() != null && item.getTranslates().size() > 0) {
                         for (Translate elem : item.getTranslates()) {
+                            elem.setId(KeyGenerator.generateKey(item.getValue(), elem.getValue()));
                             savedTranslates.add(realm.copyToRealmOrUpdate(elem));
                         }
                     }
@@ -71,10 +72,14 @@ public class RealmDBHelper {
 
     public static List<Word> getList() {
         realm = Realm.getDefaultInstance();
-        List<Word> resList = null;
+        List<Word> resList = new RealmList<>();
 
         if (realm != null) {
-            resList = realm.where(Word.class).findAll();
+
+            RealmResults<Word> results = realm.where(Word.class).findAll();
+
+            resList = realm.copyFromRealm(results);
+
             realm.close();
         }
         return resList;

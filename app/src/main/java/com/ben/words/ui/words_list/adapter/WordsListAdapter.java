@@ -38,8 +38,8 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordHolder> {
 
         Word word = wordList.get(i);
 
-        holder.translateCard.setVisibility(View.INVISIBLE);
-        holder.transcriptCard.setVisibility(View.INVISIBLE);
+        holder.translateCard.setVisibility(View.GONE);
+        holder.transcriptCard.setVisibility(View.GONE);
 
         holder.partOfSpeechCard.setText(word.getPartsOfSpeech());
         holder.wordCard.setText(word.getValue());
@@ -54,8 +54,8 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordHolder> {
                     holder.transcriptCard.setVisibility(View.VISIBLE);
                     detailMode = true;
                 }else {
-                    holder.translateCard.setVisibility(View.INVISIBLE);
-                    holder.transcriptCard.setVisibility(View.INVISIBLE);
+                    holder.translateCard.setVisibility(View.GONE);
+                    holder.transcriptCard.setVisibility(View.GONE);
                     detailMode = false;
                 }
             }

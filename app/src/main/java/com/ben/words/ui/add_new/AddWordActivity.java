@@ -2,7 +2,7 @@ package com.ben.words.ui.add_new;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,19 +10,19 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ben.words.R;
 import com.ben.words.core.App;
-import com.ben.words.core.Presenter;
 import com.ben.words.data.model.Translate;
 import com.ben.words.data.model.Word;
 import com.ben.words.ui.main.MainActivity;
+import com.ben.words.util.MessageEvent;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import javax.inject.Inject;
 
@@ -60,6 +60,8 @@ public class AddWordActivity extends AppCompatActivity implements AddWordView {
         presenter.attachPresenter(this);
 
         inputWord = new Word();
+
+        EventBus.getDefault().register(this);
     }
 
     @OnClick({R.id.btnAddTranslate, R.id.btnSaveWord})
@@ -87,6 +89,7 @@ public class AddWordActivity extends AppCompatActivity implements AddWordView {
         super.onDestroy();
         inputWord = null;
         presenter.detachPresenter();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -129,12 +132,28 @@ public class AddWordActivity extends AppCompatActivity implements AddWordView {
 
     @Override
     public void moveToScreenWithoutBack(Class<? extends Activity> cls) {
-
+        Intent intent = new Intent(this, cls);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     @Override
     public void showMessage(String str) {
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void eventBusListener(MessageEvent event) {
+        switch (event.msg) {
+            case MessageEvent.ADD_NEW_ITEM:
+                showMessage("Word is added");
+                moveToScreenWithoutBack(MainActivity.class);
+                break;
+            case MessageEvent.ADD_NEW_ITEM_IS_ERROR:
+                showMessage("ERROR: Word is not added");
+                break;
+        }
     }
 
     private boolean fieldsValidation() {
