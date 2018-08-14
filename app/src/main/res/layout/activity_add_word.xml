@@ -43,12 +43,17 @@
                     android:layout_height="wrap_content"
                     android:text="@string/part_of_speech" />
 
-                <EditText
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <!--<EditText
                     android:id="@+id/fieldPartsOfSpeech"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="textMultiLine" />
+                    android:inputType="textMultiLine" />-->
 
             </LinearLayout>
 

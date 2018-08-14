@@ -9,12 +9,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ben.words.R;
 import com.ben.words.core.App;
+import com.ben.words.data.model.PartOfSpeech;
 import com.ben.words.data.model.Translate;
 import com.ben.words.data.model.Word;
 import com.ben.words.ui.main.MainActivity;
@@ -23,6 +27,8 @@ import com.ben.words.util.MessageEvent;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -34,14 +40,16 @@ public class AddWordActivity extends AppCompatActivity implements AddWordView {
 
     private static final int DIALOG = 1;
 
-    @BindView(R.id.fieldPartsOfSpeech)
-    EditText fieldPartsOfSpeech;
+    /*@BindView(R.id.fieldPartsOfSpeech)
+    EditText fieldPartsOfSpeech;*/
     @BindView(R.id.fieldWord)
     EditText fieldWord;
     @BindView(R.id.fieldTranscription)
     EditText fieldTranscription;
     @BindView(R.id.fieldTranslate)
     TextView fieldTranslate;
+    @BindView(R.id.spinner)
+    Spinner spinner;
 
     private EditText dialogAddTranslate;
 
@@ -49,6 +57,7 @@ public class AddWordActivity extends AppCompatActivity implements AddWordView {
     public AddWordPresenter presenter;
 
     private Word inputWord;
+    private String partOfSpeech;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +70,23 @@ public class AddWordActivity extends AppCompatActivity implements AddWordView {
 
         inputWord = new Word();
 
+        final ArrayAdapter<PartOfSpeech> adapter = new ArrayAdapter<>(this, R.layout.spinner_row, R.id.part_row, PartOfSpeech.values());
+
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (adapter.getItem(i) != null) {
+                    partOfSpeech = Objects.requireNonNull(adapter.getItem(i)).getValue();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         EventBus.getDefault().register(this);
     }
 
@@ -72,7 +98,8 @@ public class AddWordActivity extends AppCompatActivity implements AddWordView {
                 break;
             case R.id.btnSaveWord:
                 if (fieldsValidation()) {
-                    inputWord.setPartsOfSpeech(fieldPartsOfSpeech.getText().toString());
+                    //inputWord.setPartsOfSpeech(fieldPartsOfSpeech.getText().toString());
+                    inputWord.setPartsOfSpeech(partOfSpeech);
                     inputWord.setValue(fieldWord.getText().toString());
                     if (!fieldTranscription.getText().toString().isEmpty()) {
                         inputWord.setTranscription(fieldTranscription.getText().toString());
@@ -157,10 +184,16 @@ public class AddWordActivity extends AppCompatActivity implements AddWordView {
     }
 
     private boolean fieldsValidation() {
-        if (fieldPartsOfSpeech.getText().toString().isEmpty()) {
+        /*if (fieldPartsOfSpeech.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Please add part of speech", Toast.LENGTH_SHORT).show();
+            return false;
+        }*/
+
+        if (partOfSpeech.isEmpty()) {
             Toast.makeText(this, "Please add part of speech", Toast.LENGTH_SHORT).show();
             return false;
         }
+
         if (fieldWord.getText().toString().isEmpty()) {
             Toast.makeText(this, "Please add value", Toast.LENGTH_SHORT).show();
             return false;
