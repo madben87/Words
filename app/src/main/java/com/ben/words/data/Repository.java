@@ -1,7 +1,5 @@
 package com.ben.words.data;
 
-import com.ben.words.data.model.Word;
-
 import java.util.List;
 
 import io.reactivex.Observable;

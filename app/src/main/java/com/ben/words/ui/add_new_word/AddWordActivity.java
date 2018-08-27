@@ -1,4 +1,4 @@
-package com.ben.words.ui.add_new;
+package com.ben.words.ui.add_new_word;
 
 import android.app.Activity;
 import android.app.Dialog;

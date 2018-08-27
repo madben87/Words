@@ -2,6 +2,7 @@ package com.ben.words.data.realm_db;
 
 import android.annotation.SuppressLint;
 
+import com.ben.words.data.model.IrregularVerb;
 import com.ben.words.data.model.Translate;
 import com.ben.words.data.model.Word;
 import com.ben.words.util.KeyGenerator;
@@ -18,8 +19,9 @@ public class RealmDBHelper {
     @SuppressLint("StaticFieldLeak")
     private static Realm realm;
     private static Word wordRes;
+    private static IrregularVerb verbRes;
 
-    public static Word addItem(final Word item) {
+    public static Word addWord(final Word item) {
         realm = Realm.getDefaultInstance();
 
         if (realm != null) {
@@ -58,7 +60,7 @@ public class RealmDBHelper {
         return wordRes;
     }
 
-    public static Word getItem(long id) {
+    public static Word getWord(long id) {
         realm = Realm.getDefaultInstance();
 
         if (realm != null) {
@@ -70,7 +72,7 @@ public class RealmDBHelper {
         return wordRes;
     }
 
-    public static List<Word> getList() {
+    public static List<Word> getWordsList() {
         realm = Realm.getDefaultInstance();
         List<Word> resList = new RealmList<>();
 
@@ -83,5 +85,47 @@ public class RealmDBHelper {
             realm.close();
         }
         return resList;
+    }
+
+    public static List<IrregularVerb> getIrrVerbList() {
+        realm = Realm.getDefaultInstance();
+        List<IrregularVerb> resList = new RealmList<>();
+
+        if (realm != null) {
+
+            RealmResults<IrregularVerb> results = realm.where(IrregularVerb.class).findAll();
+
+            resList = realm.copyFromRealm(results);
+
+            realm.close();
+        }
+        return resList;
+    }
+
+    public static IrregularVerb addNewIrrVerb(final IrregularVerb verb) {
+        realm = Realm.getDefaultInstance();
+
+        if (realm != null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+
+                    if (verb != null && !verb.getTranslate().getValue().isEmpty() && !verb.getFirstForm().isEmpty()) {
+                        IrregularVerb v = realm.createObject(IrregularVerb.class, KeyGenerator.generateKey(verb.getTranslate().getValue(), verb.getFirstForm()));
+
+                        v.setTranslate(verb.getTranslate());
+                        v.setFirstForm(verb.getFirstForm());
+                        v.setSecondForm(verb.getSecondForm());
+                        v.setThirdForm(verb.getThirdForm());
+
+                        verbRes = realm.copyToRealmOrUpdate(v);
+                    }
+                }
+            });
+
+            realm.close();
+        }
+
+        return verbRes;
     }
 }

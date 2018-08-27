@@ -1,10 +1,11 @@
-package com.ben.words.ui.words_list;
+package com.ben.words.ui.add_new_word;
 
 import com.ben.words.core.App;
 import com.ben.words.data.model.Word;
 import com.ben.words.data.realm_db.RealmWordRepository;
+import com.ben.words.util.MessageEvent;
 
-import java.util.List;
+import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
@@ -14,22 +15,22 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class WordListPresenterImpl implements WordListPresenter<WordsListView> {
+public class AddWordPresenterImpl implements AddWordPresenter<AddWordView> {
+
+    private AddWordView view;
+    private CompositeDisposable disposable;
 
     @Inject
     RealmWordRepository repository;
 
-    private WordsListView view;
-    private CompositeDisposable disposable;
-
-    public WordListPresenterImpl() {
+    public AddWordPresenterImpl() {
         App.getAppInjector().inject(this);
         disposable = new CompositeDisposable();
     }
 
     @Override
-    public void attachPresenter(WordsListView wordsListView) {
-        this.view = wordsListView;
+    public void attachPresenter(AddWordView view) {
+        this.view = view;
     }
 
     @Override
@@ -39,16 +40,18 @@ public class WordListPresenterImpl implements WordListPresenter<WordsListView> {
     }
 
     @Override
-    public void updateList() {
-        disposable.add((Disposable) repository.getList(Word.class)
+    public void addNewItem(Word word) {
+        disposable.add((Disposable) repository.addNewItem(word)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<List<Word>>() {
+                .subscribeWith(new DisposableObserver<Word>() {
                     @Override
-                    public void onNext(List<Word> list) {
-                        if (list != null && list.size() > 0) {
-                            view.updateList(list);
-                        }
+                    public void onNext(Word w) {
+                        /*if (w != null && view != null) {
+                            view.showMessage(w.getValue() + " is added");
+                        }*/
+                        //Add EventBus
+                        EventBus.getDefault().post(new MessageEvent(MessageEvent.ADD_NEW_ITEM));
                     }
 
                     @Override
@@ -60,7 +63,6 @@ public class WordListPresenterImpl implements WordListPresenter<WordsListView> {
                     public void onComplete() {
 
                     }
-                })
-        );
+                }));
     }
 }

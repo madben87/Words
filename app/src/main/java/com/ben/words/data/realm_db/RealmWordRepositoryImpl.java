@@ -8,7 +8,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
 
-public class RealmRepositoryImpl implements RealmRepository<Word> {
+public class RealmWordRepositoryImpl implements RealmWordRepository<Word> {
 
     @Override
     public Observable<List<Word>> getList(Class<Word> cls) {
@@ -16,7 +16,7 @@ public class RealmRepositoryImpl implements RealmRepository<Word> {
                 .flatMap(new Function<Class<Word>, ObservableSource<? extends List<Word>>>() {
                     @Override
                     public ObservableSource<? extends List<Word>> apply(Class<Word> wordClass) throws Exception {
-                        return Observable.just(RealmDBHelper.getList());
+                        return Observable.just(RealmDBHelper.getWordsList());
                     }
                 });
     }
@@ -27,7 +27,7 @@ public class RealmRepositoryImpl implements RealmRepository<Word> {
                 .flatMap(new Function<Class<Word>, Observable<? extends Word>>() {
                     @Override
                     public Observable<? extends Word> apply(Class<Word> wordClass) throws Exception {
-                        return Observable.just(RealmDBHelper.getItem(id));
+                        return Observable.just(RealmDBHelper.getWord(id));
                     }
                 });
     }
@@ -38,7 +38,7 @@ public class RealmRepositoryImpl implements RealmRepository<Word> {
                 .flatMap(new Function<Class<? extends Word>, Observable<? extends Word>>() {
                     @Override
                     public Observable<? extends Word> apply(Class<? extends Word> aClass) throws Exception {
-                        return Observable.just(RealmDBHelper.addItem(word));
+                        return Observable.just(RealmDBHelper.addWord(word));
                     }
                 });
     }

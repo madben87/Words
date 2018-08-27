@@ -4,5 +4,5 @@ import com.ben.words.data.Repository;
 
 import io.realm.RealmObject;
 
-public interface RealmRepository<D extends RealmObject> extends Repository<D> {
+public interface RealmIrrVerbRepository<D extends RealmObject> extends Repository<D> {
 }

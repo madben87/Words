@@ -1,8 +1,9 @@
-package com.ben.words.ui.words_list;
+package com.ben.words.ui.irr_verb_list;
 
 import com.ben.words.core.App;
+import com.ben.words.data.model.IrregularVerb;
 import com.ben.words.data.model.Word;
-import com.ben.words.data.realm_db.RealmWordRepository;
+import com.ben.words.data.realm_db.RealmIrrVerbRepository;
 
 import java.util.List;
 
@@ -14,22 +15,22 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class WordListPresenterImpl implements WordListPresenter<WordsListView> {
+public class IrrVerbListPresenterImpl implements IrrVerbListPresenter<IrrVerbListView> {
 
     @Inject
-    RealmWordRepository repository;
+    RealmIrrVerbRepository repository;
 
-    private WordsListView view;
+    private IrrVerbListView view;
     private CompositeDisposable disposable;
 
-    public WordListPresenterImpl() {
+    public IrrVerbListPresenterImpl() {
         App.getAppInjector().inject(this);
         disposable = new CompositeDisposable();
     }
 
     @Override
-    public void attachPresenter(WordsListView wordsListView) {
-        this.view = wordsListView;
+    public void attachPresenter(IrrVerbListView irrVerbListView) {
+        this.view = irrVerbListView;
     }
 
     @Override
@@ -40,12 +41,12 @@ public class WordListPresenterImpl implements WordListPresenter<WordsListView> {
 
     @Override
     public void updateList() {
-        disposable.add((Disposable) repository.getList(Word.class)
+        disposable.add((Disposable) repository.getList(IrregularVerb.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<List<Word>>() {
+                .subscribeWith(new DisposableObserver<List<IrregularVerb>>() {
                     @Override
-                    public void onNext(List<Word> list) {
+                    public void onNext(List<IrregularVerb> list) {
                         if (list != null && list.size() > 0) {
                             view.updateList(list);
                         }

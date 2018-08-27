@@ -1,19 +1,13 @@
 package com.ben.words.ui.main;
 
 import com.ben.words.data.Repository;
-import com.ben.words.data.model.Word;
-import com.ben.words.data.realm_db.RealmRepositoryImpl;
-import com.ben.words.ui.add_new.AddWordActivity;
-
-import java.util.concurrent.TimeUnit;
+import com.ben.words.data.realm_db.RealmWordRepositoryImpl;
+import com.ben.words.ui.add_new_verb.AddVerbActivity;
+import com.ben.words.ui.add_new_word.AddWordActivity;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainPresenterImpl implements MainPresenter<MainView> {
 
@@ -23,8 +17,12 @@ public class MainPresenterImpl implements MainPresenter<MainView> {
     public MainPresenterImpl() {}
 
     @Override
-    public void addNewWord() {
-        view.moveToScreenWithoutBack(AddWordActivity.class);
+    public void addNewItem(int action) {
+        if (action == MainActivity.Action.WORD.getAction()) {
+            view.moveToScreenWithoutBack(AddWordActivity.class);
+        }else if (action == MainActivity.Action.VERB.getAction()) {
+            view.moveToScreenWithoutBack(AddVerbActivity.class);
+        }
     }
 
     @Override
@@ -37,9 +35,9 @@ public class MainPresenterImpl implements MainPresenter<MainView> {
         view = null;
     }
 
-    @Override
+    //@Override
     public void test() {
-        Repository repository = new RealmRepositoryImpl();
+        Repository repository = new RealmWordRepositoryImpl();
 
         /*Word word = new Word();
         word.setPartsOfSpeech("adj");

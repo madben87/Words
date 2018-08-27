@@ -17,11 +17,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.add_new.AddWordActivity" />
+        <activity android:name=".ui.add_new_word.AddWordActivity" />
 
         <service
             android:name=".service.DBSyncIntentService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity android:name=".ui.add_new_verb.AddVerbActivity"></activity>
     </application>
 
 </manifest>

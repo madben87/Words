@@ -18,7 +18,8 @@ import android.widget.Toast;
 
 import com.ben.words.R;
 import com.ben.words.core.App;
-import com.ben.words.ui.add_new.AddWordActivity;
+import com.ben.words.data.model.PartOfSpeech;
+import com.ben.words.ui.irr_verb_list.IrrVerbListFragment;
 import com.ben.words.ui.main.adapter.MainPagerAdapter;
 import com.ben.words.ui.words_list.WordsListFragment;
 import com.ben.words.util.MessageEvent;
@@ -28,7 +29,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,13 +74,13 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
 
         pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFragment(new WordsListFragment(), "Words list");
+        pagerAdapter.addFragment(new IrrVerbListFragment(), "Irregular Verbs");
         mainViewPager.setAdapter(pagerAdapter);
     }
 
     @OnClick(R.id.fab)
     public void click(View view) {
-        presenter.addNewWord();
-        //presenter.test();
+        presenter.addNewItem(mainViewPager.getCurrentItem());
     }
 
     @Override
@@ -168,5 +168,20 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    enum Action {
+
+        WORD(0), VERB(1);
+
+        private int action;
+
+        Action(int action) {
+            this.action = action;
+        }
+
+        public int getAction() {
+            return action;
+        }
     }
 }
