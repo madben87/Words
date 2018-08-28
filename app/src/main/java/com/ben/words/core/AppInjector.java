@@ -2,6 +2,7 @@ package com.ben.words.core;
 
 import com.ben.words.modules.ContextModule;
 import com.ben.words.modules.RepositoryModule;
+import com.ben.words.service.DBSyncIntentService;
 import com.ben.words.ui.add_new_verb.AddVerbPresenterImpl;
 import com.ben.words.ui.add_new_word.AddWordPresenterImpl;
 import com.ben.words.ui.irr_verb_list.IrrVerbListPresenterImpl;
@@ -19,4 +20,6 @@ public interface AppInjector {
     void inject(AddVerbPresenterImpl presenter);
     void inject(WordListPresenterImpl presenter);
     void inject(IrrVerbListPresenterImpl presenter);
+    void inject(SharedManager manager);
+    void inject(DBSyncIntentService dbSyncIntentService);
 }

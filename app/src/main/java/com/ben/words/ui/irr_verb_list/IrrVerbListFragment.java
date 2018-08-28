@@ -2,6 +2,7 @@ package com.ben.words.ui.irr_verb_list;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -76,6 +77,12 @@ public class IrrVerbListFragment extends Fragment implements IrrVerbListView {
     @Override
     public void moveToScreenWithoutBack(Class<? extends Activity> cls) {
 
+    }
+
+    @Override
+    public void moveToScreenWithBack(Class<? extends Activity> cls) {
+        Intent intent = new Intent(getContext(), cls);
+        startActivity(intent);
     }
 
     @Override

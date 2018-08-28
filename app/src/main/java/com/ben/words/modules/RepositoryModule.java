@@ -1,5 +1,6 @@
 package com.ben.words.modules;
 
+import com.ben.words.data.model.Word;
 import com.ben.words.data.realm_db.RealmIrrVerbRepository;
 import com.ben.words.data.realm_db.RealmIrrVerbRepositoryImpl;
 import com.ben.words.data.realm_db.RealmWordRepository;

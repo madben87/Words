@@ -19,9 +19,9 @@ public class MainPresenterImpl implements MainPresenter<MainView> {
     @Override
     public void addNewItem(int action) {
         if (action == MainActivity.Action.WORD.getAction()) {
-            view.moveToScreenWithoutBack(AddWordActivity.class);
+            view.moveToScreenWithBack(AddWordActivity.class);
         }else if (action == MainActivity.Action.VERB.getAction()) {
-            view.moveToScreenWithoutBack(AddVerbActivity.class);
+            view.moveToScreenWithBack(AddVerbActivity.class);
         }
     }
 

@@ -1,7 +1,9 @@
 package com.ben.words.ui.add_new_word;
 
 import com.ben.words.core.App;
+import com.ben.words.core.SharedManager;
 import com.ben.words.data.model.Word;
+import com.ben.words.data.realm_db.FireBaseDBHelper;
 import com.ben.words.data.realm_db.RealmWordRepository;
 import com.ben.words.util.MessageEvent;
 
@@ -51,6 +53,8 @@ public class AddWordPresenterImpl implements AddWordPresenter<AddWordView> {
                             view.showMessage(w.getValue() + " is added");
                         }*/
                         //Add EventBus
+
+                        SharedManager.getInstance().setWordSyncState(true);
                         EventBus.getDefault().post(new MessageEvent(MessageEvent.ADD_NEW_ITEM));
                     }
 

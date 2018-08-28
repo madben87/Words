@@ -39,6 +39,9 @@ public class IrrVerbHolder extends RecyclerView.ViewHolder implements AdapterVie
     public IrrVerbHolder(@NonNull View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+
+        irrVerbListItem.setPreventCornerOverlap(false);
+        irrVerbListItem.setOnClickListener(this);
     }
 
     @Override

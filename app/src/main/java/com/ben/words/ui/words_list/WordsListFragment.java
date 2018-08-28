@@ -2,6 +2,7 @@ package com.ben.words.ui.words_list;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -77,6 +78,12 @@ public class WordsListFragment extends Fragment implements WordsListView {
     }
 
     @Override
+    public void moveToScreenWithBack(Class<? extends Activity> cls) {
+        Intent intent = new Intent(getContext(), cls);
+        startActivity(intent);
+    }
+
+    @Override
     public void showMessage(String str) {
         Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
     }
@@ -86,7 +93,7 @@ public class WordsListFragment extends Fragment implements WordsListView {
     public void eventBusListener(MessageEvent event) {
         switch (event.msg) {
             case MessageEvent.ADD_NEW_ITEM:
-                showMessage("Word is added");
+                //showMessage("Word is added");
                 listAdapter.notifyDataSetChanged();
                 break;
             case MessageEvent.ADD_NEW_ITEM_IS_ERROR:

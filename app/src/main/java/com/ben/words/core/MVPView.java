@@ -10,6 +10,7 @@ import org.greenrobot.eventbus.ThreadMode;
 public interface MVPView {
 
     void moveToScreenWithoutBack(Class<? extends Activity> cls);
+    void moveToScreenWithBack(Class<? extends Activity> cls);
     void showMessage(String str);
     void eventBusListener(MessageEvent event);
 }

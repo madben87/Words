@@ -1,6 +1,7 @@
 package com.ben.words.ui.add_new_verb;
 
 import com.ben.words.core.App;
+import com.ben.words.core.SharedManager;
 import com.ben.words.data.model.IrregularVerb;
 import com.ben.words.data.model.Word;
 import com.ben.words.data.realm_db.RealmIrrVerbRepository;
@@ -45,10 +46,11 @@ public class AddVerbPresenterImpl implements AddVerbPresenter<AddVerbView> {
         disposable.add((Disposable) repository.addNewItem(verb)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<Word>() {
+                .subscribeWith(new DisposableObserver<IrregularVerb>() {
                     @Override
-                    public void onNext(Word w) {
+                    public void onNext(IrregularVerb v) {
 
+                        SharedManager.getInstance().setVerbSyncState(true);
                         EventBus.getDefault().post(new MessageEvent(MessageEvent.ADD_NEW_ITEM));
                     }
 

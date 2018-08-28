@@ -17,15 +17,17 @@ import io.realm.RealmResults;
 public class RealmDBHelper {
 
     @SuppressLint("StaticFieldLeak")
-    private static Realm realm;
+    private static Realm wordRealm;
+    @SuppressLint("StaticFieldLeak")
+    private static Realm verbRealm;
     private static Word wordRes;
     private static IrregularVerb verbRes;
 
     public static Word addWord(final Word item) {
-        realm = Realm.getDefaultInstance();
+        wordRealm = Realm.getDefaultInstance();
 
-        if (realm != null) {
-            realm.executeTransaction(new Realm.Transaction() {
+        if (wordRealm != null) {
+            wordRealm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
 
@@ -54,66 +56,75 @@ public class RealmDBHelper {
                 }
             });
 
-            realm.close();
+            wordRealm.close();
         }
 
         return wordRes;
     }
 
     public static Word getWord(long id) {
-        realm = Realm.getDefaultInstance();
+        wordRealm = Realm.getDefaultInstance();
 
-        if (realm != null) {
-            wordRes = realm.where(Word.class).equalTo("id", id).findFirst();
+        if (wordRealm != null) {
+            wordRes = wordRealm.where(Word.class).equalTo("id", id).findFirst();
 
-            realm.close();
+            wordRealm.close();
         }
 
         return wordRes;
     }
 
     public static List<Word> getWordsList() {
-        realm = Realm.getDefaultInstance();
+        wordRealm = Realm.getDefaultInstance();
         List<Word> resList = new RealmList<>();
 
-        if (realm != null) {
+        if (wordRealm != null) {
 
-            RealmResults<Word> results = realm.where(Word.class).findAll();
+            RealmResults<Word> results = wordRealm.where(Word.class).findAll();
 
-            resList = realm.copyFromRealm(results);
+            resList = wordRealm.copyFromRealm(results);
 
-            realm.close();
+            //wordRealm.close();
         }
         return resList;
     }
 
     public static List<IrregularVerb> getIrrVerbList() {
-        realm = Realm.getDefaultInstance();
+        verbRealm = Realm.getDefaultInstance();
         List<IrregularVerb> resList = new RealmList<>();
 
-        if (realm != null) {
+        if (verbRealm != null) {
 
-            RealmResults<IrregularVerb> results = realm.where(IrregularVerb.class).findAll();
+            RealmResults<IrregularVerb> results = verbRealm.where(IrregularVerb.class).findAll();
 
-            resList = realm.copyFromRealm(results);
+            resList = verbRealm.copyFromRealm(results);
 
-            realm.close();
+            verbRealm.close();
         }
         return resList;
     }
 
     public static IrregularVerb addNewIrrVerb(final IrregularVerb verb) {
-        realm = Realm.getDefaultInstance();
 
-        if (realm != null) {
-            realm.executeTransaction(new Realm.Transaction() {
+        verbRealm = Realm.getDefaultInstance();
+
+        if (verbRealm != null) {
+            verbRealm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
 
                     if (verb != null && !verb.getTranslate().getValue().isEmpty() && !verb.getFirstForm().isEmpty()) {
+
+                        long i = KeyGenerator.generateKey(verb.getTranslate().getValue(), verb.getFirstForm());
+                        verb.getTranslate().setId(i);
+
+                        Translate translate = new Translate();
+                        translate.setId(i);
+                        translate.setValue(verb.getTranslate().getValue());
+
                         IrregularVerb v = realm.createObject(IrregularVerb.class, KeyGenerator.generateKey(verb.getTranslate().getValue(), verb.getFirstForm()));
 
-                        v.setTranslate(verb.getTranslate());
+                        v.setTranslate(realm.copyToRealmOrUpdate(translate));
                         v.setFirstForm(verb.getFirstForm());
                         v.setSecondForm(verb.getSecondForm());
                         v.setThirdForm(verb.getThirdForm());
@@ -123,7 +134,7 @@ public class RealmDBHelper {
                 }
             });
 
-            realm.close();
+            verbRealm.close();
         }
 
         return verbRes;

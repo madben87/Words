@@ -15,6 +15,8 @@ public class App extends Application {
     private AppInjector appInjector;
     private ScreenInjector screenInjector;
 
+    private int mainPageState;
+
     public static App getAppInstance() {
         return appInstance;
     }
@@ -41,6 +43,14 @@ public class App extends Application {
                 .builder()
                 .presenterModule(new PresenterModule())
                 .build();
+    }
+
+    public int getMainPageState() {
+        return mainPageState;
+    }
+
+    public void setMainPageState(int mainPageState) {
+        this.mainPageState = mainPageState;
     }
 
     public static AppInjector getAppInjector() {

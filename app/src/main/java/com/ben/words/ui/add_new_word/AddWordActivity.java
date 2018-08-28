@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -105,7 +106,7 @@ public class AddWordActivity extends AppCompatActivity implements AddWordView {
                         inputWord.setTranscription(fieldTranscription.getText().toString());
                     }
                     presenter.addNewItem(inputWord);
-                    moveToScreenWithoutBack(MainActivity.class);
+                    //moveToScreenWithoutBack(MainActivity.class);
                 }
                 break;
         }
@@ -161,6 +162,12 @@ public class AddWordActivity extends AppCompatActivity implements AddWordView {
     public void moveToScreenWithoutBack(Class<? extends Activity> cls) {
         Intent intent = new Intent(this, cls);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    @Override
+    public void moveToScreenWithBack(Class<? extends Activity> cls) {
+        Intent intent = new Intent(this, cls);
         startActivity(intent);
     }
 

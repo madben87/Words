@@ -18,7 +18,9 @@ import android.widget.Toast;
 
 import com.ben.words.R;
 import com.ben.words.core.App;
+import com.ben.words.core.SharedManager;
 import com.ben.words.data.model.PartOfSpeech;
+import com.ben.words.service.DBSyncIntentService;
 import com.ben.words.ui.irr_verb_list.IrrVerbListFragment;
 import com.ben.words.ui.main.adapter.MainPagerAdapter;
 import com.ben.words.ui.words_list.WordsListFragment;
@@ -76,6 +78,27 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
         pagerAdapter.addFragment(new WordsListFragment(), "Words list");
         pagerAdapter.addFragment(new IrrVerbListFragment(), "Irregular Verbs");
         mainViewPager.setAdapter(pagerAdapter);
+        mainViewPager.setCurrentItem(App.getAppInstance().getMainPageState());
+
+        mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                App.getAppInstance().setMainPageState(i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+
+        //Intent intent = new Intent(this, DBSyncIntentService.class);
+        //startService(intent);
     }
 
     @OnClick(R.id.fab)
@@ -101,6 +124,12 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
     }
 
     @Override
+    public void moveToScreenWithBack(Class<? extends Activity> cls) {
+        Intent intent = new Intent(this, cls);
+        startActivity(intent);
+    }
+
+    @Override
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showMessage(String str) {
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
@@ -110,10 +139,10 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
     public void eventBusListener(MessageEvent event) {
         switch (event.msg) {
             case MessageEvent.ADD_NEW_ITEM:
-                showMessage("Word is added");
+                //showMessage("Word is added");
                 break;
             case MessageEvent.ADD_NEW_ITEM_IS_ERROR:
-                showMessage("ERROR: Word is not added");
+                //showMessage("ERROR: Word is not added");
                 break;
         }
     }
@@ -143,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        App.getAppInstance().setMainPageState(mainViewPager.getCurrentItem());
         presenter.detachPresenter();
         EventBus.getDefault().unregister(this);
     }

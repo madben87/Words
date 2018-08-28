@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.ben.words.R;
 import com.ben.words.core.App;
 import com.ben.words.data.model.IrregularVerb;
+import com.ben.words.data.model.Translate;
 import com.ben.words.ui.main.MainActivity;
 import com.ben.words.util.MessageEvent;
 
@@ -60,8 +61,15 @@ public class AddVerbActivity extends AppCompatActivity implements AddVerbView {
             case R.id.btnSaveVerb:
                 if (fieldsValidation()) {
 
+                    Translate translate = new Translate();
+                    translate.setValue(fieldVerbTranslate.getText().toString());
+                    inputVerb.setTranslate(translate);
+                    inputVerb.setFirstForm(fieldFirstForm.getText().toString());
+                    inputVerb.setSecondForm(fieldSecondForm.getText().toString());
+                    inputVerb.setThirdForm(fieldThirdForm.getText().toString());
+
                     presenter.addNewItem(inputVerb);
-                    moveToScreenWithoutBack(MainActivity.class);
+                    //moveToScreenWithoutBack(MainActivity.class);
                 }
                 break;
         }
@@ -79,6 +87,12 @@ public class AddVerbActivity extends AppCompatActivity implements AddVerbView {
     public void moveToScreenWithoutBack(Class<? extends Activity> cls) {
         Intent intent = new Intent(this, cls);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    @Override
+    public void moveToScreenWithBack(Class<? extends Activity> cls) {
+        Intent intent = new Intent(this, cls);
         startActivity(intent);
     }
 
