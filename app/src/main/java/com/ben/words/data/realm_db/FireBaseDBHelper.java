@@ -2,6 +2,7 @@ package com.ben.words.data.realm_db;
 
 import android.support.annotation.NonNull;
 
+import com.ben.words.data.model.IrregularVerb;
 import com.ben.words.data.model.Word;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,5 +41,25 @@ public class FireBaseDBHelper {
 
     public static void addWord(Word word) {
         databaseReference.child(USER_UID).child(WORDS_TABLE).child(String.valueOf(word.getId())).setValue(word);
+    }
+
+    public static List<IrregularVerb> getVerbs() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return null;
+    }
+
+    public static void addVerbs(IrregularVerb verb) {
+        databaseReference.child(USER_UID).child(VERBS_TABLE).child(String.valueOf(verb.getId())).setValue(verb);
     }
 }

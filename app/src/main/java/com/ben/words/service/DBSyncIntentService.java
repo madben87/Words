@@ -23,6 +23,9 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 
 public class DBSyncIntentService extends IntentService {
 
@@ -30,8 +33,8 @@ public class DBSyncIntentService extends IntentService {
     RealmWordRepository wordRepository;
     @Inject
     RealmIrrVerbRepository verbRepository;
-
-    private CompositeDisposable compositeDisposable;
+    private Realm wordRealm;
+    private Realm verbRealm;
 
     public DBSyncIntentService() {
         super("DBSyncIntentService");
@@ -40,78 +43,57 @@ public class DBSyncIntentService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        compositeDisposable = new CompositeDisposable();
         App.getAppInjector().inject(this);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        compositeDisposable.add((Disposable) wordRepository.getList(Word.class)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                /*.doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        RealmDBHelper.openRealm();
-                    }
-                })
-                .doOnDispose(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        RealmDBHelper.closeRealm();
-                    }
-                })*/
-                .subscribeWith(new DisposableObserver<List<Word>>() {
-                    @Override
-                    public void onNext(List<Word> list) {
-                        if (list != null && list.size() > 0) {
-                            for (Word elem : list) {
-                                FireBaseDBHelper.addWord(elem);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        String s = e.getMessage();
-                        s.isEmpty();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        String s = " ";
-                    }
-                })
-        );
-
         if (SharedManager.getInstance().getWordSyncState()) {
+            wordRealm = Realm.getDefaultInstance();
 
+            List<Word> resList;
 
+            if (wordRealm != null) {
+
+                RealmResults<Word> results = wordRealm.where(Word.class).findAll();
+
+                resList = wordRealm.copyFromRealm(results);
+
+                for (Word elem : resList) {
+                    FireBaseDBHelper.addWord(elem);
+                }
+
+                if (wordRealm != null) {
+                    wordRealm.close();
+                }
+            }
         }
 
         if (SharedManager.getInstance().getVerbSyncState()) {
+            verbRealm = Realm.getDefaultInstance();
 
+            List<IrregularVerb> resList;
 
+            if (verbRealm != null) {
+
+                RealmResults<IrregularVerb> results = verbRealm.where(IrregularVerb.class).findAll();
+
+                resList = verbRealm.copyFromRealm(results);
+
+                for (IrregularVerb elem : resList) {
+                    FireBaseDBHelper.addVerbs(elem);
+                }
+
+                if (verbRealm != null) {
+                    verbRealm.close();
+                }
+            }
         }
-
-        syncWords();
-    }
-
-    private void syncWords(/*List<Word> list*/) {
-
-
-        SharedManager.getInstance().setWordSyncState(false);
-    }
-
-    private void syncVerbs(List<IrregularVerb> list) {
-
-        SharedManager.getInstance().setVerbSyncState(false);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        compositeDisposable.clear();
     }
 }

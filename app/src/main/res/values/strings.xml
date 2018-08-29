@@ -11,6 +11,11 @@
     <string name="word">Word</string>
     <string name="transcription">Transcription</string>
 
+    <!--facebook-->
+    <string name="facebook_application_id" translatable="false">329824414427974</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">329824414427974</string>
+    <!--<string name="facebook_login_protocol_scheme" translatable="false">fb329824414427974</string>-->
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="save">SAVE</string>
