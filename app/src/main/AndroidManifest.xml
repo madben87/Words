@@ -25,10 +25,10 @@
             android:name=".service.DBSyncIntentService"
             android:exported="false" />
 
-        <activity android:name=".ui.add_new_verb.AddVerbActivity"></activity>
+        <activity android:name=".ui.add_new_verb.AddVerbActivity" />
 
         <!--<meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+            android:value="@string/facebook_application_id"/>
 
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=
@@ -41,9 +41,10 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/fb_login_protocol_scheme" />
+                <data android:scheme="@string/facebook_login_protocol_scheme" />
             </intent-filter>
         </activity>-->
+
 
     </application>
 

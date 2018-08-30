@@ -28,9 +28,10 @@ import com.ben.words.ui.irr_verb_list.IrrVerbListFragment;
 import com.ben.words.ui.main.adapter.MainPagerAdapter;
 import com.ben.words.ui.words_list.WordsListFragment;
 import com.ben.words.util.MessageEvent;
-import com.facebook.FacebookSdk;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -119,6 +120,14 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
         userName = (TextView) header.findViewById(R.id.userName);
         userEmail = (TextView) header.findViewById(R.id.userEmail);
         userAvatar = (ImageView) header.findViewById(R.id.userAvatar);
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() != null) {
+            userName.setText(auth.getCurrentUser().getDisplayName());
+            userEmail.setText(auth.getCurrentUser().getEmail());
+        } else {
+            // not signed in
+        }
 
         //Intent intent = new Intent(this, DBSyncIntentService.class);
         //startService(intent);
@@ -231,12 +240,19 @@ public class MainActivity extends AppCompatActivity implements MainView, Navigat
 
         } else if (id == R.id.nav_share) {
 
+            AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        public void onComplete(@NonNull Task<Void> task) {
+                            showMessage("Sign Out complete");
+                        }
+                    });
         } else if (id == R.id.nav_login) {
 
             List<AuthUI.IdpConfig> providers = Arrays.asList(
                     new AuthUI.IdpConfig.EmailBuilder().build(),
-                    new AuthUI.IdpConfig.GoogleBuilder().build()/*,
-                    new AuthUI.IdpConfig.FacebookBuilder().build()*/);
+                    new AuthUI.IdpConfig.GoogleBuilder().build(),
+                    new AuthUI.IdpConfig.FacebookBuilder().build());
 
             startActivityForResult(
                     AuthUI.getInstance()
